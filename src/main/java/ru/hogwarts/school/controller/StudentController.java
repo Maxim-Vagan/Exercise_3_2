@@ -45,17 +45,13 @@ public class StudentController {
 
     @PutMapping
     public ResponseEntity updateStudent(@RequestBody Student inpStudent) {
-        Student resultEntity = studentService.updateStudent(inpStudent.getId(), inpStudent);
+        Student resultEntity = studentService.updateStudent(inpStudent);
         return ResponseEntity.ok(resultEntity);
     }
 
     @DeleteMapping
     public ResponseEntity deleteStudent(@RequestParam long studentID) {
-        Student resultEntity = studentService.deleteStudent(studentID);
-        if (resultEntity != null) {
-            return ResponseEntity.ok(resultEntity);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        studentService.deleteStudent(studentID);
+        return ResponseEntity.ok().build();
     }
 }

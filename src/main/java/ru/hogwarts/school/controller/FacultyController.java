@@ -43,17 +43,13 @@ public class FacultyController {
     }
     @PutMapping
     public ResponseEntity updateStudent(@RequestBody Faculty inpFaculty) {
-        Faculty resultEntity = facultyService.updateFaculty(inpFaculty.getId(), inpFaculty);
+        Faculty resultEntity = facultyService.updateFaculty(inpFaculty);
         return ResponseEntity.ok(resultEntity);
     }
 
     @DeleteMapping
     public ResponseEntity deleteStudent(@RequestParam long facultyID) {
-        Faculty resultEntity = facultyService.deleteFaculty(facultyID);
-        if (resultEntity != null) {
-            return ResponseEntity.ok(resultEntity);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        facultyService.deleteFaculty(facultyID);
+        return ResponseEntity.ok().build();
     }
 }

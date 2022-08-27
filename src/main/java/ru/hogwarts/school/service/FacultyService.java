@@ -18,8 +18,8 @@ public interface FacultyService {
     List<Faculty> getFacultiesByColor(String inpColor);
 
     // Update
-    Faculty updateFaculty(long inpId, Faculty inpUpdatedFaculty);
+    Faculty updateFaculty(Faculty inpUpdatedFaculty);
 
     // Delete
-    Faculty deleteFaculty(long inpId);
+    void deleteFaculty(long inpId);
 }

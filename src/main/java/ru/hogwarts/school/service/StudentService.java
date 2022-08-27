@@ -18,8 +18,8 @@ public interface StudentService {
     List<Student> getStudentsByAge(int inpAge);
 
     // Update
-    Student updateStudent(long inpId, Student inpUpdatedStudent);
+    Student updateStudent(Student inpUpdatedStudent);
 
     // Delete
-    Student deleteStudent(long inpId);
+    void deleteStudent(long inpId);
 }
