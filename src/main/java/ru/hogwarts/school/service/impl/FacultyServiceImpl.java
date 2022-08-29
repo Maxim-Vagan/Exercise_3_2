@@ -24,7 +24,7 @@ public class FacultyServiceImpl implements FacultyService {
     // Read
     @Override
     public Faculty findFaculty(long inpId) {
-        return facultyRepo.findById(inpId).get();
+        return facultyRepo.findById(inpId).orElse(null);
     }
     // Read
     @Override
@@ -34,9 +34,7 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public List<Faculty> getFacultiesByColor(String inpColor) {
-        return facultyRepo.findAll().stream()
-                .filter(e -> e.getColor().equals(inpColor))
-                .collect(Collectors.toList());
+        return facultyRepo.findByColor(inpColor);
     }
 
     // Update

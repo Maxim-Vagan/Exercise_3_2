@@ -2,9 +2,11 @@ package ru.hogwarts.school.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,34 +19,36 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity createStudent(@RequestBody Student inpStudent) {
+    public ResponseEntity<Student> createStudent(@RequestBody Student inpStudent) {
         Student resultEntity = studentService.addStudent(inpStudent);
         return ResponseEntity.ok(resultEntity);
     }
 
-    @GetMapping
-    public ResponseEntity getStudent(@RequestParam(value = "studentID", required = false) Long studentID) {
+    @GetMapping("{studentID}")
+    public ResponseEntity<List<Student>> getStudent(@RequestParam(required = false) Long studentID) {
+        List<Student> resultEntity = new ArrayList<Student>();
         if (studentID != null) {
-            Student resultEntity = studentService.findStudent(studentID);
-            if (resultEntity != null) {
+            Student result = studentService.findStudent(studentID);
+            if (result != null) {
+                resultEntity.add(result);
                 return ResponseEntity.ok(resultEntity);
             } else {
                 return ResponseEntity.notFound().build();
             }
         } else {
-            List<Student> resultEntity = studentService.getAllStudents();
+            resultEntity = studentService.getAllStudents();
             return ResponseEntity.ok(resultEntity);
         }
     }
 
-    @GetMapping(path="/GetByAge")
-    public ResponseEntity getStudentsByAge(@RequestParam("age") int studentsAge) {
-        List<Student> resultEntity = studentService.getStudentsByAge(studentsAge);
+    @GetMapping(path="/GetByAge", params="{age}")
+    public ResponseEntity<List<Student>> getStudentsByAge(@RequestParam int age) {
+        List<Student> resultEntity = studentService.getStudentsByAge(age);
         return ResponseEntity.ok(resultEntity);
     }
 
     @PutMapping
-    public ResponseEntity updateStudent(@RequestBody Student inpStudent) {
+    public ResponseEntity<Student> updateStudent(@RequestBody Student inpStudent) {
         Student resultEntity = studentService.updateStudent(inpStudent);
         return ResponseEntity.ok(resultEntity);
     }
