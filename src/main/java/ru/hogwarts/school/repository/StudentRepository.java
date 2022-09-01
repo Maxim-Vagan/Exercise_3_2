@@ -10,5 +10,7 @@ import java.util.List;
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
     List<Student> findByAge(Integer age);
-    
+
+    List<Student> findStudentsByAgeBetween(int ageFrom, int ageTo);
+
 }

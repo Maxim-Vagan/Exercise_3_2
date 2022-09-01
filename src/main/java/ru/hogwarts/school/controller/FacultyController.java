@@ -3,13 +3,16 @@ package ru.hogwarts.school.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @RestController
-@RequestMapping(path="/faculty")
+@RequestMapping(path = "/faculty")
 public class FacultyController {
     private final FacultyService facultyService;
 
@@ -24,27 +27,43 @@ public class FacultyController {
     }
 
     @GetMapping("{facultyID}")
-    public ResponseEntity<List<Faculty>> getFaculty(@RequestParam(required = false) Long facultyID) {
-        List<Faculty> resultEntity = new ArrayList<Faculty>();
-        if (facultyID != null) {
-            Faculty result = facultyService.findFaculty(facultyID);
-            if (result != null) {
-                resultEntity.add(result);
-                return ResponseEntity.ok(resultEntity);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } else {
-            resultEntity = facultyService.getAllFaculties();
+    public ResponseEntity<Faculty> getFaculty(@RequestParam Long facultyID) {
+        Faculty resultEntity = facultyService.findFaculty(facultyID);
+        if (resultEntity != null) {
             return ResponseEntity.ok(resultEntity);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 
-    @GetMapping(path="/GetByColor", params="{color}")
-    public ResponseEntity<List<Faculty>> getFacultiesByColor(@RequestParam String facultyColor) {
-        List<Faculty> resultEntity = facultyService.getFacultiesByColor(facultyColor);
+    @GetMapping
+    public ResponseEntity<List<Faculty>> getFaculties() {
+        List<Faculty> resultEntity = facultyService.getAllFaculties();
+        if (resultEntity != null) {
+            return ResponseEntity.ok(resultEntity);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping(path = "/GetByColor", params = "colorName")
+    public ResponseEntity<List<Faculty>> getFacultiesByColor(@RequestParam String colorName) {
+        List<Faculty> resultEntity = facultyService.getFacultiesByColor(colorName);
         return ResponseEntity.ok(resultEntity);
     }
+
+    @GetMapping(path = "/GetByColorOrName", params = {"colorName", "facultyName"})
+    public ResponseEntity<List<Faculty>> getFacultiesByColor(@RequestParam String colorName, String facultyName) {
+        List<Faculty> resultEntity = facultyService.getFacultiesByColorOrNameIgnoreCase(colorName, facultyName);
+        return ResponseEntity.ok(resultEntity);
+    }
+
+    @GetMapping(path = "/GetStudentsOfFaculty", params = "facultyID")
+    public ResponseEntity<Set<Student>> getFacultiesByColor(@RequestParam Long facultyID) {
+        Set<Student> resultEntity = facultyService.getStudentsOfFaculty(facultyID);
+        return ResponseEntity.ok(resultEntity);
+    }
+
     @PutMapping
     public ResponseEntity<Faculty> updateFaculty(@RequestBody Faculty inpFaculty) {
         Faculty resultEntity = facultyService.updateFaculty(inpFaculty);

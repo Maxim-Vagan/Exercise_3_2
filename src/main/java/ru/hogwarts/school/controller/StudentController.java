@@ -6,11 +6,10 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(path="/student")
+@RequestMapping(path = "/student")
 public class StudentController {
     private final StudentService studentService;
 
@@ -25,25 +24,44 @@ public class StudentController {
     }
 
     @GetMapping("{studentID}")
-    public ResponseEntity<List<Student>> getStudent(@RequestParam(required = false) Long studentID) {
-        List<Student> resultEntity = new ArrayList<Student>();
-        if (studentID != null) {
-            Student result = studentService.findStudent(studentID);
-            if (result != null) {
-                resultEntity.add(result);
-                return ResponseEntity.ok(resultEntity);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } else {
-            resultEntity = studentService.getAllStudents();
+    public ResponseEntity<Student> getStudent(@RequestParam Long studentID) {
+        Student resultEntity = studentService.findStudent(studentID);
+        if (resultEntity != null) {
             return ResponseEntity.ok(resultEntity);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 
-    @GetMapping(path="/GetByAge", params="{age}")
+    @GetMapping(path="/getFacultyOfStudent", params="studentID")
+    public ResponseEntity<Faculty> getFacultyOfStudent(@RequestParam Long studentID) {
+        Faculty resultEntity = studentService.getFacultyOfStudent(studentID);
+        if (resultEntity != null) {
+            return ResponseEntity.ok(resultEntity);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Student>> getStudents() {
+        List<Student> resultEntity = studentService.getAllStudents();
+        if (resultEntity != null) {
+            return ResponseEntity.ok(resultEntity);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping(path = "/GetByAge", params = "age")
     public ResponseEntity<List<Student>> getStudentsByAge(@RequestParam int age) {
         List<Student> resultEntity = studentService.getStudentsByAge(age);
+        return ResponseEntity.ok(resultEntity);
+    }
+
+    @GetMapping(path = "/GetBetweenAges", params = {"minAge", "maxAge"})
+    public ResponseEntity<List<Student>> getStudentsBetweenAge(@RequestParam int minAge, int maxAge) {
+        List<Student> resultEntity = studentService.getStudentsBetweenAges(minAge, maxAge);
         return ResponseEntity.ok(resultEntity);
     }
 
