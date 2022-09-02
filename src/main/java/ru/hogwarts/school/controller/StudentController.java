@@ -24,7 +24,7 @@ public class StudentController {
     }
 
     @GetMapping("{studentID}")
-    public ResponseEntity<Student> getStudent(@RequestParam Long studentID) {
+    public ResponseEntity<Student> getStudent(@PathVariable Long studentID) {
         Student resultEntity = studentService.findStudent(studentID);
         if (resultEntity != null) {
             return ResponseEntity.ok(resultEntity);
@@ -33,8 +33,8 @@ public class StudentController {
         }
     }
 
-    @GetMapping(path="/getFacultyOfStudent", params="studentID")
-    public ResponseEntity<Faculty> getFacultyOfStudent(@RequestParam Long studentID) {
+    @GetMapping("/{studentID}/faculty")
+    public ResponseEntity<Faculty> getFacultyOfStudent(@PathVariable Long studentID) {
         Faculty resultEntity = studentService.getFacultyOfStudent(studentID);
         if (resultEntity != null) {
             return ResponseEntity.ok(resultEntity);
@@ -53,13 +53,13 @@ public class StudentController {
         }
     }
 
-    @GetMapping(path = "/GetByAge", params = "age")
+    @GetMapping(path = "/findByAge", params = "age")
     public ResponseEntity<List<Student>> getStudentsByAge(@RequestParam int age) {
         List<Student> resultEntity = studentService.getStudentsByAge(age);
         return ResponseEntity.ok(resultEntity);
     }
 
-    @GetMapping(path = "/GetBetweenAges", params = {"minAge", "maxAge"})
+    @GetMapping(path = "/findBetweenAges", params = {"minAge", "maxAge"})
     public ResponseEntity<List<Student>> getStudentsBetweenAge(@RequestParam int minAge, int maxAge) {
         List<Student> resultEntity = studentService.getStudentsBetweenAges(minAge, maxAge);
         return ResponseEntity.ok(resultEntity);

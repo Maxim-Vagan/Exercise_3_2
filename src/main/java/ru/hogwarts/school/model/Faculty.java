@@ -1,5 +1,8 @@
 package ru.hogwarts.school.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
@@ -12,6 +15,7 @@ public class Faculty {
     private String name;
     private String color;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "facultyOfStudent")
+    @JsonIgnore
     private Set<Student> studentsOfFaculty;
 
     public long getFacultyid() {

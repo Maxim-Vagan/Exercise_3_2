@@ -27,7 +27,7 @@ public class FacultyController {
     }
 
     @GetMapping("{facultyID}")
-    public ResponseEntity<Faculty> getFaculty(@RequestParam Long facultyID) {
+    public ResponseEntity<Faculty> getFaculty(@PathVariable Long facultyID) {
         Faculty resultEntity = facultyService.findFaculty(facultyID);
         if (resultEntity != null) {
             return ResponseEntity.ok(resultEntity);
@@ -46,20 +46,20 @@ public class FacultyController {
         }
     }
 
-    @GetMapping(path = "/GetByColor", params = "colorName")
+    @GetMapping(path = "/findByColor", params = "colorName")
     public ResponseEntity<List<Faculty>> getFacultiesByColor(@RequestParam String colorName) {
         List<Faculty> resultEntity = facultyService.getFacultiesByColor(colorName);
         return ResponseEntity.ok(resultEntity);
     }
 
-    @GetMapping(path = "/GetByColorOrName", params = {"colorName", "facultyName"})
+    @GetMapping(path = "/findByColorOrName", params = {"colorName", "facultyName"})
     public ResponseEntity<List<Faculty>> getFacultiesByColor(@RequestParam String colorName, String facultyName) {
         List<Faculty> resultEntity = facultyService.getFacultiesByColorOrNameIgnoreCase(colorName, facultyName);
         return ResponseEntity.ok(resultEntity);
     }
 
-    @GetMapping(path = "/GetStudentsOfFaculty", params = "facultyID")
-    public ResponseEntity<Set<Student>> getFacultiesByColor(@RequestParam Long facultyID) {
+    @GetMapping("/{facultyID}/students")
+    public ResponseEntity<Set<Student>> GetStudentsOfFaculty(@PathVariable Long facultyID) {
         Set<Student> resultEntity = facultyService.getStudentsOfFaculty(facultyID);
         return ResponseEntity.ok(resultEntity);
     }
