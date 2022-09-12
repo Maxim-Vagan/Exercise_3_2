@@ -6,10 +6,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping(path = "/faculty")
@@ -59,9 +56,13 @@ public class FacultyController {
     }
 
     @GetMapping("/{facultyID}/students")
-    public ResponseEntity<Set<Student>> GetStudentsOfFaculty(@PathVariable Long facultyID) {
-        Set<Student> resultEntity = facultyService.getStudentsOfFaculty(facultyID);
-        return ResponseEntity.ok(resultEntity);
+    public ResponseEntity<List<Student>> GetStudentsOfFaculty(@PathVariable Long facultyID) {
+        List<Student> resultEntity = facultyService.getStudentsOfFaculty(facultyID);
+        if (resultEntity != null) {
+            return ResponseEntity.ok(resultEntity);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping

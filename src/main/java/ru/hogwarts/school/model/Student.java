@@ -1,5 +1,7 @@
 package ru.hogwarts.school.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -11,9 +13,10 @@ public class Student {
     private Long studentid;
     private String name;
     private int age;
+
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "faculty_id", referencedColumnName = "facultyid")
-    //@JsonIgnore
     private Faculty facultyOfStudent;
 
     public String getName() {
@@ -39,8 +42,7 @@ public class Student {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Student)) return false;
-        Student student = (Student) o;
+        if (!(o instanceof Student student)) return false;
         return getAge() == student.getAge() && getName().equals(student.getName());
     }
 

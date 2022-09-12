@@ -38,6 +38,7 @@ public class StudentServiceImpl implements StudentService {
         return studRepo.findByAge(inpAge);
     }
     // Read
+    @Override
     public List<Student> getStudentsBetweenAges(int minAge, int maxAge) {
         return studRepo.findStudentsByAgeBetween (minAge, maxAge);
     }
@@ -55,5 +56,20 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteStudent(long inpId) {
         studRepo.deleteById(inpId);
+    }
+    // Read
+    @Override
+    public Integer getAllStudentsByQuery(){
+        return studRepo.getAllStudentsOfSchool();
+    }
+    // Read
+    @Override
+    public Integer getAvgAgeByQuery(){
+        return studRepo.getAvgAgeOfStudents();
+    }
+    // Read
+    @Override
+    public List<Student> getLast5Students() {
+        return studRepo.getLast5Students();
     }
 }

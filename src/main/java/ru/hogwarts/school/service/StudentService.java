@@ -29,4 +29,13 @@ public interface StudentService {
 
     // Delete
     void deleteStudent(long inpId);
+
+    // Read
+    Integer getAllStudentsByQuery();
+
+    // Read
+    Integer getAvgAgeByQuery();
+
+    // Read
+    List<Student> getLast5Students();
 }

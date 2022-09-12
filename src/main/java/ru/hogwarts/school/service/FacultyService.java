@@ -3,9 +3,7 @@ package ru.hogwarts.school.service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 public interface FacultyService {
     // Create
@@ -18,7 +16,7 @@ public interface FacultyService {
     List<Faculty> getAllFaculties();
 
     // Read
-    Set<Student> getStudentsOfFaculty(Long facultyID);
+    List<Student> getStudentsOfFaculty(Long facultyID);
 
     // Read
     List<Faculty> getFacultiesByColor(String inpColor);

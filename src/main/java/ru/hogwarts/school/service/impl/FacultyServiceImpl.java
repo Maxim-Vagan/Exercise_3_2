@@ -4,9 +4,9 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
+import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.FacultyService;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -45,8 +45,10 @@ public class FacultyServiceImpl implements FacultyService {
     }
     // Read
     @Override
-    public Set<Student> getStudentsOfFaculty(Long inpFacultyID) {
-        return findFaculty(inpFacultyID).getStudentsOfFaculty();
+    public List<Student> getStudentsOfFaculty(Long inpFacultyID) {
+        Faculty currFaculty = findFaculty(inpFacultyID);
+        if (currFaculty!=null) {return currFaculty.getStudentsOfFaculty();}
+        else {return null;}
     }
     // Update
     @Override

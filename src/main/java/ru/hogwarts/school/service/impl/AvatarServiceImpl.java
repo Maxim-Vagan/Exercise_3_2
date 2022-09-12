@@ -1,9 +1,9 @@
 package ru.hogwarts.school.service.impl;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.hogwarts.school.exceptions.StudentNotFoundException;
 import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.AvatarRepository;
@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -55,16 +56,22 @@ public class AvatarServiceImpl implements AvatarService {
         }
 
         Avatar curPicture = avatarRepo.findByStudentStudentid(studentID).orElse(new Avatar());
-        curPicture.setData(inpPicture.getBytes());
+        curPicture.setStudent(curStudent);
         curPicture.setFilePath(imagePath.toString());
         curPicture.setFileSize(inpPicture.getSize());
         curPicture.setMediaType(inpPicture.getContentType());
-        curPicture.setStudent(curStudent);
+        curPicture.setData(inpPicture.getBytes());
         avatarRepo.save(curPicture);
     }
 
     @Override
     public Avatar getPicture(Long studentID) {
         return avatarRepo.findByStudentStudentid(studentID).orElse(null);
+    }
+
+    @Override
+    public List<Avatar> getAllPicturesWithPagging(Integer page, Integer limit){
+        PageRequest pageRequest = PageRequest.of(page - 1, limit);
+        return avatarRepo.findAll(pageRequest).getContent();
     }
 }

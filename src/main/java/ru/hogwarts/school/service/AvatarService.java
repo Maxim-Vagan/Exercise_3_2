@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Avatar;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface AvatarService {
     //Create
@@ -11,4 +12,6 @@ public interface AvatarService {
 
     //Read
     Avatar getPicture(Long studentID);
+
+    List<Avatar> getAllPicturesWithPagging(Integer page, Integer limit);
 }

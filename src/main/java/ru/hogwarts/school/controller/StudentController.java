@@ -135,4 +135,26 @@ public class StudentController {
         studentService.deleteStudent(studentID);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping(path="/countOfAllStudents")
+    public ResponseEntity getAllStudentsOfSchool() {
+        Integer studentCount = studentService.getAllStudentsByQuery();
+        return ResponseEntity.ok(studentCount);
+    }
+
+    @GetMapping(path="/avgAgeOfStudent")
+    public ResponseEntity getAvgAgeByQuery() {
+        Integer avgAge = studentService.getAvgAgeByQuery();
+        return ResponseEntity.ok(avgAge);
+    }
+
+    @GetMapping(path="/last5Students")
+    public ResponseEntity getLast5Students() {
+        List<Student> lastFiveStudents = studentService.getLast5Students();
+        if (lastFiveStudents != null) {
+            return ResponseEntity.ok(lastFiveStudents);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
