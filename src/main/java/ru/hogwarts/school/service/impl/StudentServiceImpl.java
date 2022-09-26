@@ -9,12 +9,13 @@ import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studRepo;
-    private Logger studLogger = LoggerFactory.getLogger(StudentServiceImpl.class);
+    private final Logger studLogger = LoggerFactory.getLogger(StudentServiceImpl.class);
     public StudentServiceImpl(StudentRepository studRepo) {
         this.studRepo = studRepo;
     }
@@ -87,5 +88,23 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> getLast5Students() {
         studLogger.debug("Вызван метод getLast5Students");
         return studRepo.getLast5Students();
+    }
+    // Read
+    @Override
+    public List<String> getAlphaNamesOfStudentsByStreamAPI() {
+        studLogger.debug("Вызван метод getStreamAlphaStudents");
+        return studRepo.findAll().stream()
+                .filter(e -> e.getName().startsWith("А"))
+                .map(e -> e.getName().toUpperCase())
+                .sorted()
+                .collect(Collectors.toList());
+    }
+    // Read
+    @Override
+    public Float getAvgAgeByStreamAPI(){
+        studLogger.debug("Вызван метод getAvgAgeByStreamAPI");
+        return (float) studRepo.findAll().stream()
+                .map(Student::getAge)
+                .reduce(0, Integer::sum) / studRepo.findAll().size();
     }
 }

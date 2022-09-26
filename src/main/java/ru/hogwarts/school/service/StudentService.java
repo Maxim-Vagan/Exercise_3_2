@@ -34,8 +34,14 @@ public interface StudentService {
     Integer getAllStudentsByQuery();
 
     // Read
-    Integer getAvgAgeByQuery();
+    Float getAvgAgeByQuery();
 
     // Read
     List<Student> getLast5Students();
+
+    // Read
+    List<String> getAlphaNamesOfStudentsByStreamAPI();
+
+    // Read
+    Float getAvgAgeByStreamAPI();
 }

@@ -67,13 +67,35 @@ public class FacultyController {
 
     @PutMapping
     public ResponseEntity<Faculty> updateFaculty(@RequestBody Faculty inpFaculty) {
-        Faculty resultEntity = facultyService.updateFaculty(inpFaculty);
-        return ResponseEntity.ok(resultEntity);
+        Faculty resultEntity = facultyService.findFaculty(inpFaculty.getFacultyid());
+        if (resultEntity != null) {
+            facultyService.updateFaculty(inpFaculty);
+            return ResponseEntity.ok(resultEntity);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping
-    public ResponseEntity deleteFaculty(@RequestParam long facultyID) {
-        facultyService.deleteFaculty(facultyID);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Faculty> deleteFaculty(@RequestParam long facultyID) {
+        Faculty resultEntity = facultyService.findFaculty(facultyID);
+        if (resultEntity != null) {
+            facultyService.deleteFaculty(facultyID);
+            return ResponseEntity.ok(resultEntity);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/longestFacultyName")
+    public ResponseEntity<String> getFacultiesByColor() {
+        String resultEntity = facultyService.getLongestFacultyName();
+        return ResponseEntity.ok(resultEntity);
+    }
+
+    @GetMapping("/getFormula")
+    public ResponseEntity<Integer> getFormulaResult() {
+        int resultEntity = facultyService.getFormulaResult();
+        return ResponseEntity.ok(resultEntity);
     }
 }

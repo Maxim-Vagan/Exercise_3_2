@@ -25,8 +25,14 @@ public interface FacultyService {
     List<Faculty> getFacultiesByColorOrNameIgnoreCase(String inpColor, String inpName);
 
     // Update
-    Faculty updateFaculty(Faculty inpUpdatedFaculty);
+    void updateFaculty(Faculty inpUpdatedFaculty);
 
     // Delete
     void deleteFaculty(long inpId);
+
+    // Read
+    String getLongestFacultyName();
+
+    // Read
+    int getFormulaResult();
 }

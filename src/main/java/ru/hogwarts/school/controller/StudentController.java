@@ -21,8 +21,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
-
 @RestController
 @RequestMapping(path = "/student")
 public class StudentController {
@@ -126,35 +124,56 @@ public class StudentController {
 
     @PutMapping
     public ResponseEntity<Student> updateStudent(@RequestBody Student inpStudent) {
-        Student resultEntity = studentService.updateStudent(inpStudent);
-        return ResponseEntity.ok(resultEntity);
+        Student resultEntity = studentService.findStudent(inpStudent.getStudentid());
+        if (resultEntity != null) {
+            studentService.updateStudent(inpStudent);
+            return ResponseEntity.ok(resultEntity);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping
-    public ResponseEntity deleteStudent(@RequestParam long studentID) {
+    public ResponseEntity<?> deleteStudent(@RequestParam long studentID) {
         studentService.deleteStudent(studentID);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(path="/countOfAllStudents")
-    public ResponseEntity getAllStudentsOfSchool() {
+    public ResponseEntity<Integer> getAllStudentsOfSchool() {
         Integer studentCount = studentService.getAllStudentsByQuery();
         return ResponseEntity.ok(studentCount);
     }
 
     @GetMapping(path="/avgAgeOfStudent")
-    public ResponseEntity getAvgAgeByQuery() {
-        Integer avgAge = studentService.getAvgAgeByQuery();
+    public ResponseEntity<Float> getAvgAgeByQuery() {
+        Float avgAge = studentService.getAvgAgeByQuery();
         return ResponseEntity.ok(avgAge);
     }
 
     @GetMapping(path="/last5Students")
-    public ResponseEntity getLast5Students() {
+    public ResponseEntity<List<Student>> getLast5Students() {
         List<Student> lastFiveStudents = studentService.getLast5Students();
         if (lastFiveStudents != null) {
             return ResponseEntity.ok(lastFiveStudents);
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping(path="/sortedAlphaNamesOfStudent")
+    public ResponseEntity<List<String>> getSortedAlphaNamesOfStudents() {
+        List<String> studentNames = studentService.getAlphaNamesOfStudentsByStreamAPI();
+        if (studentNames != null) {
+            return ResponseEntity.ok(studentNames);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping(path="/avgAgeOfStudentStreamAPI")
+    public ResponseEntity<Float> getAvgAgeByStreamAPI() {
+        Float avgAge = studentService.getAvgAgeByStreamAPI();
+        return ResponseEntity.ok(avgAge);
     }
 }
