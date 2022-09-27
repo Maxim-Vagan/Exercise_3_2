@@ -103,8 +103,10 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Float getAvgAgeByStreamAPI(){
         studLogger.debug("Вызван метод getAvgAgeByStreamAPI");
-        return (float) studRepo.findAll().stream()
+        return /*(float) studRepo.findAll().stream()
                 .map(Student::getAge)
-                .reduce(0, Integer::sum) / studRepo.findAll().size();
+                .reduce(0, Integer::sum) / studRepo.findAll().size()*/
+                (float) studRepo.findAll().stream().mapToInt(Student::getAge)
+                        .average().orElse(0f);
     }
 }
