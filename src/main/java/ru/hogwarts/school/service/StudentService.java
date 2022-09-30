@@ -44,4 +44,10 @@ public interface StudentService {
 
     // Read
     Float getAvgAgeByStreamAPI();
+
+    // Read
+    void getAllStudentByThread();
+
+    // Read
+    void getAllStudentBySynchroThread();
 }

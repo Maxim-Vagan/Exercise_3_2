@@ -1,5 +1,6 @@
 package ru.hogwarts.school.service.impl;
 
+import org.hibernate.annotations.Synchronize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studRepo;
     private final Logger studLogger = LoggerFactory.getLogger(StudentServiceImpl.class);
+    public static final Object flagForSyncThreads = new Object();
     public StudentServiceImpl(StudentRepository studRepo) {
         this.studRepo = studRepo;
     }
@@ -108,5 +110,63 @@ public class StudentServiceImpl implements StudentService {
                 .reduce(0, Integer::sum) / studRepo.findAll().size()*/
                 (float) studRepo.findAll().stream().mapToInt(Student::getAge)
                         .average().orElse(0f);
+    }
+
+    private static void prtOutName(Student student){
+        String curThreadName = Thread.currentThread().getName();
+        try {
+            System.out.println(curThreadName + ": student name is " + student.getName());
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            System.err.println("Thread " + curThreadName + " was interrupted!");
+        }
+    }
+
+    private static void prtSyncOutName(Student student){
+        String curThreadName = Thread.currentThread().getName();
+        synchronized (flagForSyncThreads){
+            try {
+                System.out.println(curThreadName + ": student name is " + student.getName());
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                System.err.println("Thread " + curThreadName + " was interrupted!");
+            }
+        }
+    }
+
+    // Read
+    @Override
+    public void getAllStudentByThread(){
+        List<Student> listStds = studRepo.findAll();
+        prtOutName(listStds.get(0));
+        prtOutName(listStds.get(1));
+        Thread thread1 = new Thread(() -> {
+            prtOutName(listStds.get(2));
+            prtOutName(listStds.get(3));
+        });
+        Thread thread2 = new Thread(() -> {
+            prtOutName(listStds.get(4));
+            prtOutName(listStds.get(5));
+        });
+        thread1.start();
+        thread2.start();
+    }
+
+    // Read
+    @Override
+    public void getAllStudentBySynchroThread(){
+        List<Student> listStds = studRepo.findAll();
+        prtSyncOutName(listStds.get(0));
+        prtSyncOutName(listStds.get(1));
+        Thread thread3 = new Thread(() -> {
+            prtSyncOutName(listStds.get(2));
+            prtSyncOutName(listStds.get(3));
+        });
+        Thread thread4 = new Thread(() -> {
+            prtSyncOutName(listStds.get(4));
+            prtSyncOutName(listStds.get(5));
+        });
+        thread3.start();
+        thread4.start();
     }
 }

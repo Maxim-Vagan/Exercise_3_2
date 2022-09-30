@@ -154,26 +154,30 @@ public class StudentController {
     @GetMapping(path="/last5Students")
     public ResponseEntity<List<Student>> getLast5Students() {
         List<Student> lastFiveStudents = studentService.getLast5Students();
-        if (lastFiveStudents != null) {
-            return ResponseEntity.ok(lastFiveStudents);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(lastFiveStudents);
     }
 
     @GetMapping(path="/sortedAlphaNamesOfStudent")
     public ResponseEntity<List<String>> getSortedAlphaNamesOfStudents() {
         List<String> studentNames = studentService.getAlphaNamesOfStudentsByStreamAPI();
-        if (studentNames != null) {
-            return ResponseEntity.ok(studentNames);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(studentNames);
     }
 
     @GetMapping(path="/avgAgeOfStudentStreamAPI")
     public ResponseEntity<Float> getAvgAgeByStreamAPI() {
         Float avgAge = studentService.getAvgAgeByStreamAPI();
         return ResponseEntity.ok(avgAge);
+    }
+
+    @GetMapping(path="/ShowAllStudent")
+    public ResponseEntity<?> getAllStudentByThread() {
+        studentService.getAllStudentByThread();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(path="/ShowAllStudentSynchroThreads")
+    public ResponseEntity<?> getAllStudentBySynchroThread() {
+        studentService.getAllStudentBySynchroThread();
+        return ResponseEntity.ok().build();
     }
 }
