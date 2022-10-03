@@ -17,7 +17,8 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studRepo;
     private final Logger studLogger = LoggerFactory.getLogger(StudentServiceImpl.class);
-    public static final Object flagForSyncThreads = new Object();
+    private final Object flagForSyncThreads = new Object();
+
     public StudentServiceImpl(StudentRepository studRepo) {
         this.studRepo = studRepo;
     }
@@ -122,11 +123,13 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    private static void prtSyncOutName(Student student){
+    private void prtSyncOutName(Student student1, Student student2){
         String curThreadName = Thread.currentThread().getName();
         synchronized (flagForSyncThreads){
             try {
-                System.out.println(curThreadName + ": student name is " + student.getName());
+                System.out.println(curThreadName + ": student name is " + student1.getName());
+                Thread.sleep(1000);
+                System.out.println(curThreadName + ": student name is " + student2.getName());
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 System.err.println("Thread " + curThreadName + " was interrupted!");
@@ -156,15 +159,12 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void getAllStudentBySynchroThread(){
         List<Student> listStds = studRepo.findAll();
-        prtSyncOutName(listStds.get(0));
-        prtSyncOutName(listStds.get(1));
+        prtSyncOutName(listStds.get(0), listStds.get(1));
         Thread thread3 = new Thread(() -> {
-            prtSyncOutName(listStds.get(2));
-            prtSyncOutName(listStds.get(3));
+            prtSyncOutName(listStds.get(2), listStds.get(3));
         });
         Thread thread4 = new Thread(() -> {
-            prtSyncOutName(listStds.get(4));
-            prtSyncOutName(listStds.get(5));
+            prtSyncOutName(listStds.get(4), listStds.get(5));
         });
         thread3.start();
         thread4.start();
